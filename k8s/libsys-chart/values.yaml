@@ -1,0 +1,89 @@
+gateway:
+  image:
+    repository: cr.yandex/crp4l736sgmtcqfvvfi9/gateway-service
+    tag: v1
+  service:
+    port: 8080
+    targetPort: 8080
+  labels:
+    appLabel: gateway-service-label
+  selectorLabels:
+    appLabel: gateway-service-label
+#  image:
+#    name: cr.yandex/crp4l736sgmtcqfvvfi9/gateway-service:v1
+#    tag: v1
+#    pullPolicy: IfNotPresent
+#  database:
+#    name: libraries
+
+#library:
+#  deployment:
+#    name:
+#    replicas: 2
+#  service:
+#    port: 8060
+#  image:
+#    name: finisto/library-service
+#    tag: latest
+#    pullPolicy: IfNotPresent
+#  database:
+#    name: libraries
+
+
+
+
+#serviceAccount:
+#  # Specifies whether a service account should be created
+#  create: true
+#  # The name of the service account to use.
+#  # If not set and create is true, a name is generated using the fullname template
+#  name:
+
+#securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+#ingress:
+#  enabled: false
+#  className: ""
+#  annotations: {}
+#     kubernetes.io/ingress.class: nginx
+#     kubernetes.io/tls-acme: "true"
+#  hosts:
+#    - host: chart-example.local
+#      paths:
+#        - path: /
+#          pathType: ImplementationSpecific
+#  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+#resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+#autoscaling:
+#  enabled: false
+#  minReplicas: 1
+#  maxReplicas: 100
+#  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+#nodeSelector: {}
+#
+#tolerations: []
+#
+#affinity: {}
