@@ -1,7 +1,7 @@
 gateway:
   image:
     repository: cr.yandex/crp4l736sgmtcqfvvfi9/gateway-service
-    tag: v1
+    tag: v1.1
   service:
     port: 8080
     targetPort: 8080
