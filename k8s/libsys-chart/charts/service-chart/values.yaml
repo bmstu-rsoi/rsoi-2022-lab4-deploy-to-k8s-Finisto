@@ -1,8 +1,6 @@
-version: 0.1.0
-service:
-  type: LoadBalancer
+version: 0.2.0
 image:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 resources:
   requests:
     cpu: 200m
