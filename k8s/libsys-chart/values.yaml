@@ -4,7 +4,7 @@ gateway:
   host: finarsi-rsoi.site
   image:
     repository: cr.yandex/crp4l736sgmtcqfvvfi9/gateway-service
-    tag: v1.4
+    tag: v1.5
   service:
     port: 8080
     targetPort: 8080
@@ -19,7 +19,7 @@ rating:
   host: rating.finarsi-rsoi.site
   image:
     repository: cr.yandex/crp4l736sgmtcqfvvfi9/rating-service
-    tag: v1.4
+    tag: v1.5
   service:
     port: 8050
     targetPort: 8050
@@ -34,7 +34,7 @@ library:
   host: library.finarsi-rsoi.site
   image:
     repository: cr.yandex/crp4l736sgmtcqfvvfi9/library-service
-    tag: v1.4
+    tag: v1.5
   service:
     port: 8060
     targetPort: 8060
@@ -50,7 +50,7 @@ rental:
   host: rental.finarsi-rsoi.site
   image:
     repository: cr.yandex/crp4l736sgmtcqfvvfi9/reservation-service
-    tag: v1.4
+    tag: v1.5
   service:
     port: 8070
     targetPort: 8070

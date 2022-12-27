@@ -13,17 +13,48 @@ jobs:
 
       - uses: docker/setup-buildx-action@v2
 
+#      - uses: nightstory/setup-yc@v1
+#        with:
+#          enable-cache: true
+#
+#      - name: Init yc
+#        run: |
+#          printf "${{secrets.CONTAINER_REGISTRY_ID}}\n1\n2\n"
+#          yc init
+#
+#      - name: config kubectl
+#        run: |
+#          yc managed-kubernetes cluster get-credentials ${{secrets.K8S_CLUSTER_ID}} --external
+#          kubectl cluster-info
+
+      - name: Setup kubernetes
+        run: |
+          kubectl config set-cluster sa-test2 --certificate-authority=ca.pem --server=${{secrets.MASTER_ENDPOINT}} --kubeconfig=test.kubeconfig
+          kubectl config set-credentials admin-user --token=${{secrets.SA_TOKEN}} --kubeconfig=test.kubeconfig
+          kubectl config set-context default --cluster=sa-test2 --user=admin-user --kubeconfig=test.kubeconfig
+          kubectl config use-context default --kubeconfig=test.kubeconfig
+
+      - name: Maven build packages
+        run: mvn clean --batch-mode --update-snapshots verify -DskipTests
 
       - name: Build docker images
-        run: docker compose build
+        run: |
+          docker build ./gateway-library-service/ --tag cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/gateway-service:v1.5
+          docker build ./rating-service/ --tag cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/rating-service:v1.5
+          docker build ./library-service/ --tag cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/library-service:v1.5
+          docker build ./reservation-service/ --tag cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/reservation-service:v1.5
 
-      - name: Login to docker hub
-        run: docker login -u ${{secrets.DOCKERHUB_USER}} -p ${{secrets.DOCKERHUB_PASSWD}}
+      - name: Push images to registry
+        run: |
+          docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/gateway-service:v1.5
+          docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/rating-service:v1.5
+          docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/library-service:v1.5
+          docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/reservation-service:v1.5
 
-      - name: Publish images to docker hub
-        run: docker compose push
-
-      # TODO deploy to k8s
+      - name: Install helm chart for library system
+        run: |
+          helm install library-system ./k8s/libsys-chart/
+          sleep 70
 
 
       - name: Run API Tests
