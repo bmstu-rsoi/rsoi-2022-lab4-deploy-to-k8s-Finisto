@@ -1,10 +1,10 @@
-version: 0.2.0
+version: 0.3.0
 image:
   pullPolicy: Always
 resources:
   requests:
-    cpu: 200m
-    memory: 512Mi
+    cpu: 500m
+    memory: 350Mi
   limits:
-    cpu: 200m
-    memory: 512Mi
+    cpu: 500m
+    memory: 350Mi
