@@ -84,8 +84,6 @@ jobs:
 
       - name: Install helm chart for library system
         run: |
-#          mkdir ~/.kube
-#          kubectl config view --flatten > ~/.kube/config
           echo "----- .kube/config:"
           cat ~/.kube/config
           echo "-----kubeconfig view:"
