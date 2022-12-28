@@ -77,16 +77,16 @@ jobs:
       - name: Setup kubernetes
         run: |
           echo "${{secrets.CA_PEM}}" > ca.pem
-          kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=savenko-cluster.kubeconfig
-          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=savenko-cluster.kubeconfig
-          kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
-          kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}"
+          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" 
+          kubectl config set-context default --cluster=savenko-cluster --user=admin-user 
+          kubectl config use-context default 
 
       - name: Install helm chart for library system
         run: |
           echo "-----kubeconfig view:"
           kubectl config view --flatten 
-          helm install library-system ./k8s/libsys-chart/ --kubeconfig=savenko-cluster.kubeconfig
+          helm install library-system ./k8s/libsys-chart/ 
           sleep 90    
 
 
