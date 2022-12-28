@@ -43,6 +43,15 @@ jobs:
       - name: Maven build packages
         run: mvn clean --batch-mode --update-snapshots verify -DskipTests
 
+#      - name: Login to Docker container registry
+#        run: docker login --username ${{secrets.CONTAINER_REGISTRY_USERNAME}} --password ${{secrets.CONTAINER_REGISTRY_TOKEN}} cr.yandex
+
+      - name: Login to Yandex Cloud Container Registry
+        id: login-cr
+        uses: yc-actions/yc-cr-login@v1
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+
       - name: Build docker images
         run: |
           docker build ./gateway-library-service/ --tag cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/gateway-service:v1.5
