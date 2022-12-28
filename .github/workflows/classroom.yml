@@ -34,6 +34,12 @@ jobs:
           kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
           kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
 
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'temurin'
+
       - name: Maven build packages
         run: mvn clean --batch-mode --update-snapshots verify -DskipTests
 
