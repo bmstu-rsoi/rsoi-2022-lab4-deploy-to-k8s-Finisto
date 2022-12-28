@@ -29,10 +29,10 @@ jobs:
 
       - name: Setup kubernetes
         run: |
-          kubectl config set-cluster sa-test2 --certificate-authority=ca.pem --server=${{secrets.MASTER_ENDPOINT}} --kubeconfig=test.kubeconfig
-          kubectl config set-credentials admin-user --token=${{secrets.SA_TOKEN}} --kubeconfig=test.kubeconfig
-          kubectl config set-context default --cluster=sa-test2 --user=admin-user --kubeconfig=test.kubeconfig
-          kubectl config use-context default --kubeconfig=test.kubeconfig
+          kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config set-credentials admin-user --token=${{secrets.SA_TOKEN}} --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
 
       - name: Maven build packages
         run: mvn clean --batch-mode --update-snapshots verify -DskipTests
@@ -54,7 +54,7 @@ jobs:
       - name: Install helm chart for library system
         run: |
           helm install library-system ./k8s/libsys-chart/
-          sleep 70
+          sleep 90
 
 
       - name: Run API Tests
