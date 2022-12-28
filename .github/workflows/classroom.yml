@@ -76,9 +76,9 @@ jobs:
 
       - name: Setup kubernetes
         run: |
-          kubectl config set-cluster savenko-cluster --server="${{secrets.MASTER_ENDPOINT}}"
+          kubectl config set-cluster yc-rsoi-cluster --server="${{secrets.MASTER_ENDPOINT}}"
           kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" 
-          kubectl config set-context default --cluster=savenko-cluster --user=admin-user 
+          kubectl config set-context default --cluster=yc-rsoi-cluster --user=admin-user 
           kubectl config use-context default 
 
       - name: Install helm chart for library system
