@@ -84,11 +84,11 @@ jobs:
 
       - name: Install helm chart for library system
         run: |
-          echo "----- .kube/config:"
-          cat ~/.kube/config
+#          echo "----- .kube/config:"
+#          cat ~/.kube/config
           echo "-----kubeconfig view:"
           kubectl config view --flatten 
-          helm install library-system ./k8s/libsys-chart/ 
+          helm install library-system ./k8s/libsys-chart/ --kubeconfig=savenko-cluster.kubeconfig
           sleep 90    
 
 
