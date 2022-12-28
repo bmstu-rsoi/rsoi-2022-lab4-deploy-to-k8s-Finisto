@@ -74,8 +74,9 @@ jobs:
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/library-service:v1.5
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/reservation-service:v1.5
 
-      - name: Setup kubernetes and install helm chart
+      - name: Setup kubernetes
         run: |
+          echo "${{secrets.CA_PEM}}" > ca.pem
           kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=savenko-cluster.kubeconfig
           kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=savenko-cluster.kubeconfig
           kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
@@ -83,9 +84,11 @@ jobs:
 
       - name: Install helm chart for library system
         run: |
-          mkdir ~/.kube
-          kubectl config view --flatten > ~/.kube/config
+#          mkdir ~/.kube
+#          kubectl config view --flatten > ~/.kube/config
+          echo "----- .kube/config:"
           cat ~/.kube/config
+          echo "-----kubeconfig view:"
           kubectl config view --flatten 
           helm install library-system ./k8s/libsys-chart/ 
           sleep 90    
