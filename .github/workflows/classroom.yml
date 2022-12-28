@@ -27,16 +27,18 @@ jobs:
 #          yc managed-kubernetes cluster get-credentials ${{secrets.K8S_CLUSTER_ID}} --external
 #          kubectl cluster-info
 
-      - name: Setup kubernetes
-        run: |
-          kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=savenko-cluster.kubeconfig
-          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=savenko-cluster.kubeconfig
-          kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
-          kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
-      - name: Setup config for helm
-        run: |
-          mkdir ~/.kube
-          kubectl config view --raw > ~/.kube/config
+#      - name: Setup kubernetes
+#        run: |
+#          kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=savenko-cluster.kubeconfig
+#          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=savenko-cluster.kubeconfig
+#          kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
+#          kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
+#          helm install library-system ./k8s/libsys-chart/
+#          sleep 90
+#      - name: Setup config for helm
+#        run: |
+#          mkdir ~/.kube
+#          kubectl config view --raw > ~/.kube/config
 #          kubectl config view --raw
 #          install -D /dev/stdin ~/.kube/config
 
@@ -72,10 +74,18 @@ jobs:
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/library-service:v1.5
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/reservation-service:v1.5
 
-      - name: Install helm chart for library system
+      - name: Setup kubernetes and install helm chart
         run: |
+          kubectl config set-cluster savenko-cluster --certificate-authority=ca.pem --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
+          kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
           helm install library-system ./k8s/libsys-chart/
           sleep 90
+#      - name: Install helm chart for library system
+#        run: |
+#          helm install library-system ./k8s/libsys-chart/
+#          sleep 90
 
 
       - name: Run API Tests
