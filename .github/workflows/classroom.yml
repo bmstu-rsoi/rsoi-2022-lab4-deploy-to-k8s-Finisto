@@ -33,7 +33,12 @@ jobs:
           kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=savenko-cluster.kubeconfig
           kubectl config set-context default --cluster=savenko-cluster --user=admin-user --kubeconfig=savenko-cluster.kubeconfig
           kubectl config use-context default --kubeconfig=savenko-cluster.kubeconfig
+      - name: Setup config for helm
+        run: |
+          mkdir ~/.kube
           kubectl config view --raw > ~/.kube/config
+#          kubectl config view --raw
+#          install -D /dev/stdin ~/.kube/config
 
       - name: Set up JDK 19
         uses: actions/setup-java@v3
