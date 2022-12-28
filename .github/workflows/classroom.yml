@@ -73,23 +73,34 @@ jobs:
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/rating-service:v1.5
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/library-service:v1.5
           docker push cr.yandex/${{secrets.CONTAINER_REGISTRY_ID}}/reservation-service:v1.5
+          
 
-      - name: Setup kubernetes
-        run: |
-          echo "${{secrets.CA_PEM}}" > ca.pem
-          kubectl config set-cluster yc-rsoi-cluster --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=test.kubeconfig
-          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=test.kubeconfig
-          kubectl config set-context default --cluster=yc-rsoi-cluster --user=admin-user --kubeconfig=test.kubeconfig
-          kubectl config use-context default --kubeconfig=test.kubeconfig
+      - name: Try to execute helm INSTALL
+        uses: okar1/yc-helm@master
+        with:
+          SA_KEY: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+          K8S_CLUSTER_ID: ${{ secrets.YC_CLUSTER_ID }}
+          HELM_ARGS: library-system ./k8s/libsys-chart/
 
-      - name: Install helm chart for library system
-        run: |
-          echo "-----kubeconfig view:"
-          kubectl config view --flatten 
-          echo "-----test.kubeconfig:"
-          cat test.kubeconfig
-          helm install library-system ./k8s/libsys-chart/ --kubeconfig=test.kubeconfig
-          sleep 90    
+      - name: Wait for services to start
+        run: sleep 90
+
+#      - name: Setup kubernetes
+#        run: |
+#          echo "${{secrets.CA_PEM}}" > ca.pem
+#          kubectl config set-cluster yc-rsoi-cluster --server="${{secrets.MASTER_ENDPOINT}}" --kubeconfig=test.kubeconfig
+#          kubectl config set-credentials admin-user --token="${{secrets.SA_TOKEN}}" --kubeconfig=test.kubeconfig
+#          kubectl config set-context default --cluster=yc-rsoi-cluster --user=admin-user --kubeconfig=test.kubeconfig
+#          kubectl config use-context default --kubeconfig=test.kubeconfig
+#
+#      - name: Install helm chart for library system
+#        run: |
+#          echo "-----kubeconfig view:"
+#          kubectl config view --flatten
+#          echo "-----test.kubeconfig:"
+#          cat test.kubeconfig
+#          helm install library-system ./k8s/libsys-chart/ --kubeconfig=test.kubeconfig
+#          sleep 90
 
 
       - name: Run API Tests
